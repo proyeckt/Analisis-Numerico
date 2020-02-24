@@ -1,0 +1,41 @@
+n=50
+divisor=0
+x=sin(-pi/64)
+inferior=-pi/64
+superior=pi/64
+signo=0
+j=0
+i=0
+k=1
+iteraciones=1;
+dividendo=0
+seno=0
+while(j<=n){
+  dividendo=1
+  while(j<=2*i+1){
+    dividendo= dividendo*x
+    j=j+1
+    iteraciones=iteraciones+1;
+  }
+  divisor=1
+  while(k<=2*i+1){
+    divisor= divisor*k
+    k=k+1
+  }
+  if( i%%2==0){
+    signo=1
+  }
+  else{
+    signo=-1
+  }
+  seno=seno+(dividendo/divisor)*signo
+  i=i+1
+}
+print(seno)
+print(sin(-pi/4))
+cat("Iteraciones:",iteraciones)
+#0.002082645
+errorA=seno-sin(-pi/4)
+errorR=errorA/sin(-pi/64)
+print(errorA)
+print(errorR)
