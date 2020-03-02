@@ -65,5 +65,5 @@ a = -math.pi/64
 b = math.pi/64
 degree = 3
 angles = np.arange(a,b,0.01)
-err, coeffs = run_remez(f, a, b,degree,error)
+coeffs = run_remez(f, a, b,degree,error)
 print("Coefficients{}: {}", list(reversed(coeffs)))
