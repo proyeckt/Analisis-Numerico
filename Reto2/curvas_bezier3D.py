@@ -50,7 +50,7 @@ puntosX,puntosY,puntosZ=superfBezier(m,n)
 fig=plt.figure() 
 ax = fig.gca(projection='3d')
 ax.plot(puntosX, puntosY, puntosZ, label='bezier')
-plt.savefig('plot0.png')
+plt.savefig('plot.png')
 plt.show()
 
 # for rotate the axes and update.
