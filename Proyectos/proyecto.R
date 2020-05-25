@@ -3,6 +3,16 @@
 #Edwin Turizo Prieto
 #Juan Camilo Pimienta
 
+#REFERENCIAS
+#DATOS OFICIALES DE BRASIL:https://covid.saude.gov.br
+#DATOS TASAS OBTENIDAS DEL IMPERIAL COLLEGE:https://mrc-ide.github.io/covid19-short-term-forecasts/index.html
+#INFORMACION MODELOS EPIDEMIOLOGICOS:https://en.wikipedia.org/wiki/Compartmental_models_in_epidemiology
+
+#VALOR POR DEFECTO GAMMA: 0.54
+#VALOR POR DEFECTO BETA: 2.40
+#NÚMERO POBLACION POR DEFECTO: 210147125
+#NÚMERO DE DIAS POR DEFECTO: 78
+#NÚMERO INICIAL INFECTADOS: 1
 
 library(readxl)
 library(phaseR)
@@ -78,25 +88,17 @@ server <- function(input, output) {
   recup=as.numeric(unlist(DatosBrasil[1,12]))
   if(is.na(recup))
     recup=0;
+  #MODELO SIR RK4
   observeEvent(input$btnRK4, {
-    #output$poblacion <- renderText(recup)
     output$sirRk4 <- renderPlot({
       init       <- c(S = 1-(input$nInfectadosInicial/input$nPoblacion)-(recup/input$nPoblacion), I = input$nInfectadosInicial/input$nPoblacion, R = (recup/input$nPoblacion))
-      #init       <- c(S = 1-0.00172249, I = 0.00172249, R = 0 )
       parameters <- c(beta = input$beta, gamma = input$gamma)
-      #init       <- c(S = 1-1e-6, I = 1e-6, R = 0.0)
-      ## beta: infection parameter; gamma: recovery parameter
-      #parameters <- c(beta = 1.4247, gamma = 0.14286)
-      ## Time frame
+      
       times      <- seq(0, input$nDias, by = 1)
       
-      ## Solve using ode (General Solver for Ordinary Differential Equations)
       out <- ode(y = init, times = times, func = sir, parms = parameters, method="rk4")
-      ## change to data frame
       out <- as.data.frame(out)
-      ## Delete time variable
       out$time <- NULL
-      ## Show data
       head(out, 30)
       R_susceptibles=c(as.numeric(unlist(out[1])))
       R_infectados=c(as.numeric(unlist(out[2])))
@@ -151,8 +153,8 @@ server <- function(input, output) {
                 lwd = 1, lty = 1, bty = "l", col = 2:3)
       })
   })
-
   })
+  #MODELO SIR ADAMS
   observeEvent(input$btnAdams, {
     #output$poblacion <- renderText(recup)
     output$sirAdams <- renderPlot({
@@ -226,5 +228,4 @@ server <- function(input, output) {
   
 }
 
-# Run the application 
 shinyApp(ui = ui, server = server)
